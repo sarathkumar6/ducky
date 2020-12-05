@@ -1,5 +1,8 @@
-# <p style="color:blue">Ducky</p>
+# Ducky
 A simple full-stack web application that allows farmers to record duck feeding activities and scientists to track the activity
+
+## Technology Stack
+*Ducky* is built using MERN stack(MongoDB Express React NodeJS)
 
 ## Minimum Viable Product
   1. Allow a farmer to register an account with Ducky
