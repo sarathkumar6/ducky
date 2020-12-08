@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 const Activity = require('../models/Activity');
@@ -12,9 +13,7 @@ router.get('/', authClient, async (request, response) => {
 	try {
 		const clientInfo = await Client.findById(request.client.id).select('-password');
 		const isFarmer = clientInfo.type === 'farmer';
-		const activities = isFarmer
-			? await Activity.find({ client: request.client.id }).sort({ date: -1 })
-			: await Activity.find({}).sort({ date: -1 });
+		const activities = await Activity.find(isFarmer ? { client: request.client.id } : {}).sort({ date: -1 });
 		response.json(activities);
 	} catch (err) {
 		response.status(500).send(err.message);
@@ -32,13 +31,12 @@ router.post('/', [ authClient ], async (request, response) => {
 	const { numberOfDucks, food, foodType, country, foodQuantity } = request.body;
 	try {
 		const clientInfo = await Client.findById(request.client.id).select('-password');
-		console.log('clientInfo: ', clientInfo);
 		if (clientInfo.type !== 'farmer') {
 			return response.status(401).json({ msg: 'Authorization denied: client not a farmer' });
 		}
 		const newActivity = new Activity({
-			client: request.client.id,
-			clientName: clientInfo.name,
+			client: _.get(request, 'client.id'),
+			clientName: _.get(clientInfo, 'name'),
 			numberOfDucks,
 			food,
 			foodType,
@@ -61,16 +59,14 @@ router.put('/:id', authClient, async (request, response) => {
 	const { numberOfDucks, food, foodType, country, foodQuantity } = request.body;
 	const activityFields = {};
 
-	if (numberOfDucks) activityFields.numberOfDucks = numberOfDucks;
-	if (food) activityFields.food = food;
-	if (foodType) activityFields.foodType = foodType;
-	if (foodQuantity) activityFields.foodQuantity = foodQuantity;
-	if (country) activityFields.country = country;
+	if (numberOfDucks) _.set(activityFields, 'numberOfDucks', numberOfDucks);
+	if (food) _.set(activityFields, 'food', food);
+	if (foodType) _.set(activityFields, 'foodType', foodType);
+	if (foodQuantity) _.set(activityFields, 'foodQuantity', foodQuantity);
+	if (country) _.set(activityFields, 'countr', country);
 
 	try {
-		console.log(request.params.id);
 		const clientInfo = await Client.findById(request.client.id).select('-password');
-		console.log('clientInfo: ', clientInfo);
 		if (clientInfo.type !== 'farmer') {
 			return response.status(401).json({ msg: 'Authorization denied: client not a farmer' });
 		}
@@ -94,21 +90,20 @@ router.put('/:id', authClient, async (request, response) => {
 // @access      Private
 router.delete('/:id', authClient, async (request, response) => {
 	try {
-		console.log(request.client);
-		const clientInfo = await Client.findById(request.client.id).select('-password');
+		const clientInfo = await Client.findById(_.get(request, 'client.id')).select('-password');
 		console.log(clientInfo);
 		if (clientInfo.type !== 'farmer') {
 			return response.status(401).json({ msg: 'Authorization denied: client not a farmer' });
 		}
-		let activity = await Activity.findById(request.params.id);
+		let activity = await Activity.findById(_.get(request, 'params.id'));
 
 		if (!activity) {
 			return response.status(404).json({ message: 'Activity not found' });
 		}
-		if (activity.client.toString() !== request.client.id) {
+		if (activity.client.toString() !== _.get(request, 'client.id')) {
 			return response.status(401).json({ message: 'Not authorized to update activity' });
 		}
-		await Activity.findByIdAndRemove(request.params.id);
+		await Activity.findByIdAndRemove(_.get(request, 'params.id'));
 		response.json({ message: 'Activity removed' });
 	} catch (err) {
 		response.status(500).send(err.message);

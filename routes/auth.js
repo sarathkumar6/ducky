@@ -12,11 +12,9 @@ const auth = require('../middleware/auth');
 // @access      Private
 router.get('/', auth, async (request, response) => {
 	try {
-		console.log(request.client);
 		const client = await Client.findById(request.client.id).select('-password');
 		response.json(client);
 	} catch (err) {
-		console.log(err.message);
 		response.status(500).send('Server Error');
 	}
 });
@@ -37,8 +35,6 @@ router.post(
 		} else {
 			const { email, password } = request.body;
 			try {
-				console.log('Email: ', email);
-				console.log('Password: ', password);
 				let client = await Client.findOne({ email });
 				if (!client) {
 					return response.status(400).json({ message: 'Invalid Credentials' });
@@ -69,7 +65,6 @@ router.post(
 					);
 				}
 			} catch (err) {
-				console.log(err);
 				response.status(500).send('Server Error');
 			}
 		}

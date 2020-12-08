@@ -1,5 +1,4 @@
 import React, { useReducer } from 'react';
-import { v4 as uuid } from 'uuid';
 import ActivityContext from './activityContext';
 import activityReducer from './activityReducer';
 import axios from 'axios';
@@ -37,7 +36,7 @@ const ActivityState = (props) => {
 		}
 	};
 
-	// Add Activity
+	// POST ACTIVITY
 	const addActivity = async (activity) => {
 		const config = {
 			headers: {
@@ -52,7 +51,7 @@ const ActivityState = (props) => {
 		}
 	};
 
-	// Update Activity
+	// PUT ACTIVITY
 	const updateActivity = async (activity) => {
 		const config = {
 			headers: {
@@ -67,36 +66,27 @@ const ActivityState = (props) => {
 		}
 	};
 
-	// Delete Contact
+	// DELETE ACTIVITY
 	const deleteActivity = async (id) => {
 		try {
-			const response = await axios.delete(`/api/clients/activities/${id}`);
+			await axios.delete(`/api/clients/activities/${id}`);
 			dispatch({ type: DELETE_ACTIVITY, payload: id });
 		} catch (error) {
 			dispatch({ type: ACTIVITY_ERROR, payload: error.response.message });
 		}
 	};
 
-	// Set Current Activity
+	// SET CURRENT ACTIVITY
 	const setCurrent = (activity) => {
 		dispatch({ type: SET_CURRENT, payload: activity });
 	};
 
-	// Clear Current Activity
+	// CLEAR CURRENT ACTIVITY
 	const clearCurrent = () => {
 		dispatch({ type: CLEAR_CURRENT });
 	};
 
-	// Filter Activities
-	const filterActivities = (text) => {
-		dispatch({ type: FILTER_ACTIVITIES, payload: text });
-	};
-
-	// Clear Filter
-	const clearFilter = () => {
-		dispatch({ type: CLEAR_FILTER });
-	};
-
+	// CLEAR ACTIVITIES
 	const clearActivities = () => {
 		dispatch({ type: CLEAR_ACTIVITIES });
 	};
@@ -113,8 +103,6 @@ const ActivityState = (props) => {
 				setCurrent,
 				clearCurrent,
 				updateActivity,
-				filterActivities,
-				clearFilter,
 				getActivities,
 				clearActivities
 			}}>

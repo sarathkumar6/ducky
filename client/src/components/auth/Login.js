@@ -12,11 +12,9 @@ const Login = (props) => {
 
 	const { setAlert } = alertContext;
 	const { loginUser, error, clearErrors, isAuthenticated, type } = authContext;
-	console.log(type);
 	useEffect(
 		() => {
 			if (isAuthenticated) {
-				console.log(type);
 				props.history.push('/');
 			}
 			if (error === 'Invalid Credentials') {
