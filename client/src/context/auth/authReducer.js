@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
 	REGISTER_FAIL,
 	REGISTER_SUCCESS,
