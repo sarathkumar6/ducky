@@ -18,7 +18,6 @@ router.post(
 		check('type', 'Please enter a client type').not().isEmpty()
 	],
 	async (request, response) => {
-		console.log('Req body', request.body);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
 			return response.status(400).json({ errors: errors.array() });
@@ -26,7 +25,6 @@ router.post(
 		const { name, email, password, type } = request.body;
 		try {
 			let client = await Client.findOne({ email });
-			console.log('client: ', client);
 			if (client) {
 				return response.status(400).json({ message: 'Client already exists' });
 			}
@@ -60,7 +58,6 @@ router.post(
 				}
 			);
 		} catch (err) {
-			console.log(err);
 			response.status(500).send(err.message);
 		}
 	}

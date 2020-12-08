@@ -1,8 +1,6 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import Activities from '../activities/Activities';
-import ContactForm from '../contacts/ContactForm';
 import ActivityForm from '../activities/AcitivtyForm';
-import ContactFilter from '../contacts/ContactFilter';
 import AuthContext from '../../context/auth/authContext';
 
 const Home = () => {

@@ -4,7 +4,6 @@ import {
 	SET_CURRENT,
 	CLEAR_CURRENT,
 	UPDATE_ACTIVITY,
-	FILTER_ACTIVITIES,
 	CLEAR_FILTER,
 	ACTIVITY_ERROR,
 	GET_ACTIVITIES,
@@ -41,14 +40,6 @@ export default (state, action) => {
 					(activity) => (activity._id === action.payload._id ? action.payload : activity)
 				),
 				loading: false
-			};
-		case FILTER_ACTIVITIES:
-			return {
-				...state,
-				filtered: state.activities.filter((activity) => {
-					const regex = new RegExp(`${action.payload}`, 'gi'); // global case insensitive
-					return activity.name.match(regex) || activity.email.match(regex);
-				})
 			};
 		case CLEAR_FILTER:
 			return {

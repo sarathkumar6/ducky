@@ -1,18 +1,13 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import ContactContext from '../../context/contact/contactContext';
 import ActivityContext from '../../context/activity/activityContext';
 import ActivityItem from '../activities/ActivityItem';
 
 const Activities = ({ displayEditAndDelete }) => {
-	//const contactContext = useContext(ContactContext);
 	const activityContext = useContext(ActivityContext);
-
-	//const { filtered, contacts, getContacts } = contactContext;
-	const { filtered, activities, getActivities } = activityContext;
+	const { activities, getActivities } = activityContext;
 
 	useEffect(() => {
-		//getContacts();
 		getActivities();
 		//eslint-disable-next-line
 	}, []);
@@ -24,17 +19,17 @@ const Activities = ({ displayEditAndDelete }) => {
 			<Fragment>
 				<TransitionGroup>
 					<div className='title'>Activities</div>
-					{activities.map((contact) => (
-						<CSSTransition key={contact._id} timeout={500} classNames='item'>
+					{activities.map((activity) => (
+						<CSSTransition key={activity._id} timeout={500} classNames='item'>
 							<ActivityItem
-								clientName={contact.clientName}
-								food={contact.food}
-								foodQuantity={contact.foodQuantity}
-								id={contact._id}
-								foodType={contact.foodType}
-								country={contact.country}
-								date={contact.date}
-								numberOfDucks={contact.numberOfDucks}
+								clientName={activity.clientName}
+								food={activity.food}
+								foodQuantity={activity.foodQuantity}
+								id={activity._id}
+								foodType={activity.foodType}
+								country={activity.country}
+								date={activity.date}
+								numberOfDucks={activity.numberOfDucks}
 								displayEditAndDelete={displayEditAndDelete}
 							/>
 						</CSSTransition>
